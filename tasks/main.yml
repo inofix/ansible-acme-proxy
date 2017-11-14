@@ -1,0 +1,27 @@
+---
+# tasks file for acme-cron-proxy
+
+- name: 'Prepare a directory for storing the remote transfer scripts.'
+  file:
+    path: '{{ acme__scripts_dir }}'
+    state: 'directory'
+
+- name: 'Install a script to transfer the certificate for {{ acme__cert_name }} from the remote host(s) (usually one)'
+  template:
+    src: 'acme-remote_cert.j2'
+    dest: '{{ acme__scripts_dir }}/acme-remote_{{ acme__cert_name }}.sh'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+- name: 'Write a cron job to be run once a month for certificate transfer'
+  cron:
+    name: 'acme-remote_{{ acme__cert_name }}'
+    job: '{{ acme__scripts_dir }}/acme-remote{{ acme__cert_name }}.sh 2>> {{ acme__log_dir }}/acme-remote_{{ acme__cert_name }}.log'
+    user: '{{ acme__user }}'
+    minute: '{{ acme__cron_minute }}'
+    hour: '{{ acme__cron_hour }}'
+    day: '{{ acme__cron_day }}'
+    month: '{{ acme__cron_month }}'
+    weekday: '{{ acme__cron_weekday }}'
+
