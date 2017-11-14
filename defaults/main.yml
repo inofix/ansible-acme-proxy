@@ -1,0 +1,10 @@
+---
+# defaults file for acme-cron-proxy
+
+default__acme__remote_proxy: []
+
+default__acme__config_dir: '/etc/ssl/acme'
+default__acme__scripts_dir: '{{ default__acme__config_dir }}/scripts'
+
+
+

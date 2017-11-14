@@ -1,0 +1,6 @@
+---
+# vars file for acme-cron-proxy
+
+acme__remote_proxy: '{{ app__acme__remote_proxy |
+                        d(default__acme__remote_proxy) }}'
+
