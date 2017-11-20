@@ -1,6 +1,23 @@
 ---
 # vars file for acme-cron-proxy
 
-acme__remote_proxy: '{{ app__acme__remote_proxy |
-                        d(default__acme__remote_proxy) }}'
+acme__remote_proxy: '{{ app__acme__remote_proxy }}'
+
+acme__config_dir: '{{ app__acme__config_dir | d(default__acme__config_dir) }}'
+acme__scripts_dir: '{{ app__acme__scripts_dir | d(default__acme__scripts_dir) }}'
+acme__wrapper: '{{ acme__bin_dir }}/acme-wrapper.sh'
+
+acme__domain: '{{ app__acme__domain | d(default__acme__domain) }}'
+
+acme__cert_name: '{{ acme__domain[0]
+                            if (acme__domain is iterable and
+                            not acme__domain is string)
+                            else acme__domain }}'
+acme__cert_path: '{{ acme__config_dir }}/{{ acme__cert_name }}'
+acme__cert_dir: '{{ acme__cert_path }}'
+acme__certificate: '{{ acme__cert_path }}.crt'
+
+acme__letsencrypt_certs: '{{ app__acme__letsencrypt_certs |
+                            d(default__acme__letsencrypt_certs) }}'
+
 
