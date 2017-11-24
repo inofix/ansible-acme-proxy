@@ -1,5 +1,5 @@
 ---
-# tasks file for acme-cron-proxy
+# tasks file for acme-proxy
 
 - name: 'Prepare a directory for storing the remote transfer scripts.'
   file:
