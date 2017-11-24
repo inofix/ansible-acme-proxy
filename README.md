@@ -1,4 +1,4 @@
-[![Travis CI](https://img.shields.io/travis/inofix/ansible-acme-cron-proxy.svg?style=flat)](http://travis-ci.org/inofix/ansible-acme-cron-proxy)
+[![Travis CI](https://img.shields.io/travis/inofix/ansible-acme-proxy.svg?style=flat)](http://travis-ci.org/inofix/ansible-acme-proxy)
 
 
 Acme-Tiny Install
@@ -29,7 +29,7 @@ If radical changes should become necessary, a new role will be created, probably
 Installation
 ------------
 
- # ansible-galaxy install inofix.acme-cron-proxy
+ # ansible-galaxy install inofix.acme-proxy
 
 
 Requirements
@@ -57,7 +57,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - inofix.acme-cron-proxy
+         - inofix.acme-proxy
 
 License
 -------
