@@ -17,7 +17,7 @@
 - name: 'Write a cron job to be run once a month for certificate transfer'
   cron:
     name: 'acme-remote_{{ acme__cert_name }}'
-    job: '{{ acme__scripts_dir }}/acme-remote{{ acme__cert_name }}.sh 2>> {{ acme__log_dir }}/acme-remote_{{ acme__cert_name }}.log'
+    job: '{{ acme__scripts_dir }}/acme-remote_{{ acme__cert_name }}.sh 2>> {{ acme__log_dir }}/acme-remote_{{ acme__cert_name }}.log'
     user: '{{ acme__user }}'
     minute: '{{ acme__cron_minute }}'
     hour: '{{ acme__cron_hour }}'
