@@ -1,5 +1,5 @@
 ---
-# vars file for acme-cron-proxy
+# vars file for acme-proxy
 
 acme__remote_proxy: '{{ app__acme__remote_proxy }}'
 

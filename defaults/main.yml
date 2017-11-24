@@ -1,5 +1,5 @@
 ---
-# defaults file for acme-cron-proxy
+# defaults file for acme-proxy
 
 default__acme__remote_proxy: ''
 
