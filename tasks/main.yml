@@ -8,7 +8,7 @@
 
 - name: 'Install a script to transfer the certificate for {{ acme__cert_name }} from the remote host(s) (usually one)'
   template:
-    src: 'acme-remote_cert.j2'
+    src: 'acme-remote_cert.sh.j2'
     dest: '{{ acme__scripts_dir }}/acme-remote_{{ acme__cert_name }}.sh'
     owner: 'root'
     group: 'root'
