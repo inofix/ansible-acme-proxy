@@ -44,7 +44,7 @@ Role Variables
 --------------
 
 * app\_\_acme\_\_remote\_proxy - mandatory, hostname of where to find the certificates to collect
-
+* fqdn - optional, default={{ ansible\_fqdn | d(inventory\_hostname ) }}
 
 Dependencies
 ------------
