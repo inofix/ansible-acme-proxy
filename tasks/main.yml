@@ -6,13 +6,22 @@
     path: '{{ acme__scripts_dir }}'
     state: 'directory'
 
-- name: 'Install a script to transfer the certificate for {{ acme__cert_name }} from the remote host(s) (usually one)'
+- name: 'Install script to transfer the certificate from the remote hosts'
   template:
     src: 'acme-remote_cert.sh.j2'
     dest: '{{ acme__scripts_dir }}/acme-remote_{{ acme__cert_name }}.sh'
     owner: 'root'
     group: 'root'
     mode: '0755'
+  vars:
+    acme__cert_name: '{{ item.domain[0]
+                        if ( item.domain is iterable and
+                                not item.domain is string)
+                        else item.domain }}'
+    acme__cert_path: '{{ acme__config_dir }}/{{ acme__cert_name }}'
+    acme__certificate: '{{ acme__cert_path }}.crt'
+    acme__remote_proxy: '{{ item.sign }}'
+  with_items: '{{ acme__domain }}'
 
 - name: 'Write a cron job to be run once a month for certificate transfer'
   cron:
@@ -24,4 +33,10 @@
     day: '{{ acme__cron_day }}'
     month: '{{ acme__cron_month }}'
     weekday: '{{ acme__cron_weekday }}'
+  vars:
+    acme__cert_name: '{{ item.domain[0]
+                        if ( item.domain is iterable and
+                                not item.domain is string)
+                        else item.domain }}'
+  with_items: '{{ acme__domain }}'
 

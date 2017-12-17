@@ -6,7 +6,8 @@ default__acme__remote_proxy: ''
 default__acme__config_dir: '/etc/ssl/acme'
 default__acme__scripts_dir: '{{ default__acme__config_dir }}/scripts'
 
-default__acme__domain: 'example.com'
+default__acme__domain:
+    domain: 'example.com'
 
 default__acme__letsencrypt_certs:
   - url: 'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem'
