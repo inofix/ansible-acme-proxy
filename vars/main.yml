@@ -2,14 +2,13 @@
 # vars file for acme-proxy
 
 acme__fqdn: '{{ fqdn | d(ansible_fqdn) | d(inventory_hostname) }}'
-acme__remote_proxy: '{{ app__acme__remote_proxy }}'
 
 acme__config_dir: '{{ app__acme__config_dir | d(default__acme__config_dir) }}'
 acme__scripts_dir: '{{ app__acme__scripts_dir | d(default__acme__scripts_dir) }}'
 acme__wrapper: '{{ acme__bin_dir }}/acme-wrapper.sh'
 
 acme__cs: '{{ app__acme__domain |
-                    recectattr("sign", "equalto", acme__fqdn) | list() }}'
+                    rejectattr("sign", "equalto", acme__fqdn) | list() }}'
 acme__domain: '{{ acme__cs | d(default__acme__domain) }}'
 
 acme__letsencrypt_certs: '{{ app__acme__letsencrypt_certs |
