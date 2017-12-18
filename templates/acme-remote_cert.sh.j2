@@ -17,7 +17,7 @@ if [ "{{ acme__config_dir }}/{{ cert.file }}" -ot "/tmp/letsencrypt.tmp" ] ; the
     curstartdate=$(openssl x509 -noout -startdate \
                         -in "{{ acme__config_dir }}/{{ cert.file }}")
 
-    if [ $(date -d newstartdate +%s) -gt $(date -d curstartdate +%s) ] ; then
+    if [ $(date -d $newstartdate +%s) -gt $(date -d $curstartdate +%s) ] ; then
         echo $cert > "{{ acme__config_dir }}/{{ cert.file }}"
     fi
 fi
