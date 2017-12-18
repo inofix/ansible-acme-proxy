@@ -34,11 +34,11 @@ if [ ! -s "{{ acme__certificate }}" ] || [ "{{ acme__certificate }}" -ot "/tmp/l
                     -in "{{ acme__certificate }}")
 
     if [ $(date -d newstartdate +%s) -gt $(date -d curstartdate +%s) ] ; then
-        echo $cert > "{{ acme__certificate }}.crt"
+        echo $cert > "{{ acme__certificate }}"
 
         # install the cert as consumable for the respective services
-        cp "{{ acme__certificate }}" "{{ acme__cert_path }}/{{ acme__cert_name }}.crt"
-        cat "{{ acme__certificate }}" {% for cert in acme__letsencrypt_certs %}"{{ acme__config_dir }}/{{ cert.file }}" {% endfor %} > "{{ acme__cert_path }}/{{ acme__cert_name }}_chain.crt"
+        cp "{{ acme__certificate }}" "{{ acme__consumable_cert }}"
+        cat "{{ acme__certificate }}" {% for cert in acme__letsencrypt_certs %}"{{ acme__config_dir }}/{{ cert.file }}" {% endfor %} > "{{ acme__consumable_chain }}"
     fi
 fi
 

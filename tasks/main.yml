@@ -20,6 +20,8 @@
                         else item.domain }}'
     acme__cert_path: '{{ acme__config_dir }}/{{ acme__cert_name }}'
     acme__certificate: '{{ acme__cert_path }}.crt'
+    acme__consumable_cert: '{{ acme__cert_path }}/{{ acme__cert_name }}.crt'
+    acme__consumable_chain: '{{ acme__cert_path }}/{{ acme__cert_name }}_chain.crt'
     acme__remote_proxy: '{{ item.sign }}'
   with_items: '{{ acme__domain }}'
 
