@@ -1,40 +1,47 @@
 #!/bin/sh
+### Ansible Managed: Any local changes will be lost on next run! ###
 
 # only expect tools in this location..
 export PATH="/bin:/usr/bin:/usr/local/bin/"
 
+# calculate the start date of the certificate read from file
+c_date()
+{
+    rv=0
+    d=$(openssl x509 -noout -startdate -in "$1") ; rv=$?
+    date -d "${d#*=}" +%s ; rv=$(( rv + $? ))
+    return $rv
+}
+
+# JFTR
 date +'====== %Y-%m-%d %H:%M:%S ======' 1>&2
 
 # make sure we collect the intermediate/ca certs only once for all the different certs
-touch -d "yesterday" /tmp/letsencrypt.tmp
+touch -d "yesterday" "{{ acme__home }}/remote.timestamp"
 
 {% for cert in acme__letsencrypt_certs %}
-if [ "{{ acme__config_dir }}/{{ cert.file }}" -ot "/tmp/letsencrypt.tmp" ] ; then
-    cert=$(ssh "{{ acme__remote_proxy }}" "{{ acme__wrapper }}" get_ca "{{ cert.file }}")
+if [ ! -s "{{ acme__config_dir }}/{{ cert.file }}" ] || [ "{{ acme__config_dir }}/{{ cert.file }}" -ot "{{ acme__home }}/remote.timestamp" ] ; then
+    ssh "{{ acme__remote_proxy }}" "{{ acme__wrapper }}" get_ca "{{ cert.file }}" > "{{ acme__home }}/{{ cert.file }}"
 
-    newstartdate=$(echo $cert | openssl x509 -noout -startdate |\
-                        cut -d "=" -f2)
-    curstartdate=$(openssl x509 -noout -startdate \
-                        -in "{{ acme__config_dir }}/{{ cert.file }}")
+    newstartdate=$(c_date "{{ acme__home }}/{{ cert.file }}") || newstartdate=0
+    curstartdate=$(c_date "{{ acme__config_dir }}/{{ cert.file }}") || curstartdate=1
 
-    if [ $(date -d $newstartdate +%s) -gt $(date -d $curstartdate +%s) ] ; then
-        echo $cert > "{{ acme__config_dir }}/{{ cert.file }}"
+    if [ $newstartdate -gt $curstartdate ] ; then
+        cp "{{ acme__home }}/{{ cert.file }}" "{{ acme__config_dir }}/{{ cert.file }}"
     fi
 fi
 {% endfor %}
 
 # if the cert is missing (zero-size) or olther then a month
-if [ ! -s "{{ acme__certificate }}" ] || [ "{{ acme__certificate }}" -ot "/tmp/letsencrypt.tmp" ] ; then
+if [ ! -s "{{ acme__certificate }}" ] || [ "{{ acme__certificate }}" -ot "{{ acme__home }}/remote.timestamp" ] ; then
     # ask for a newly signed cert
-    cert=$(ssh "{{ acme__remote_proxy }}" "{{ acme__wrapper }}" get_cert "{{ acme__cert_name }}")
+    ssh "{{ acme__remote_proxy }}" "{{ acme__wrapper }}" get_certificate "{{ acme__cert_name }}" > "{{ acme__home }}/{{ acme__cert_name }}"
 
-    newstartdate=$(echo $cert | openssl x509 -noout -startdate |\
-                    cut -d "=" -f2)
-    curstartdate=$(openssl x509 -noout -startdate \
-                    -in "{{ acme__certificate }}")
+    newstartdate=$(c_date "{{ acme__home }}/{{ acme__cert_name }}") || newstartdate=0
+    curstartdate=$(c_date "{{ acme__certificate }}") || curstartdate=1
 
-    if [ $(date -d newstartdate +%s) -gt $(date -d curstartdate +%s) ] ; then
-        echo $cert > "{{ acme__certificate }}"
+    if [ $newstartdate -gt $curstartdate ] ; then
+        cp "{{ acme__home }}/{{ acme__cert_name }}" "{{ acme__certificate }}"
 
         # install the cert as consumable for the respective services
         cp "{{ acme__certificate }}" "{{ acme__consumable_cert }}"
