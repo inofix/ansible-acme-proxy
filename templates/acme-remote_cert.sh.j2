@@ -28,6 +28,7 @@ if [ ! -s "{{ acme__config_dir }}/{{ cert.file }}" ] || [ "{{ acme__config_dir }
 
     if [ $newstartdate -gt $curstartdate ] ; then
         cp "{{ acme__home }}/{{ cert.file }}" "{{ acme__config_dir }}/{{ cert.file }}"
+        sed -i 's;\r$;;' "{{ acme__config_dir }}/{{ cert.file }}"
     fi
 fi
 {% endfor %}
