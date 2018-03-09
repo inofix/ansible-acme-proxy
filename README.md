@@ -1,8 +1,8 @@
 [![Travis CI](https://img.shields.io/travis/inofix/ansible-acme-proxy.svg?style=flat)](http://travis-ci.org/inofix/ansible-acme-proxy)
 
 
-Acme-Tiny Install
-=================
+Acme Proxy
+==========
 
 This is an ansible role for transfering the certificate between a host that organizes the signing with Let's Encrypt and the (this) host which hosts the service (mail, jabber, what ever..). This role is to be run on the service side, getting the certificates from the remote end where the signing was requested.
 
