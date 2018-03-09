@@ -1,8 +1,8 @@
 [![Travis CI](https://img.shields.io/travis/inofix/ansible-acme-proxy.svg?style=flat)](http://travis-ci.org/inofix/ansible-acme-proxy)
 
 
-Acme-Tiny Install
-=================
+Acme Proxy
+==========
 
 This is an ansible role for transfering the certificate between a host that organizes the signing with Let's Encrypt and the (this) host which hosts the service (mail, jabber, what ever..). This role is to be run on the service side, getting the certificates from the remote end where the signing was requested.
 
@@ -15,7 +15,7 @@ Why we do not use one of the existing roles?
 State
 -----
 
-UNSTABLE!
+preSTABLE (Feature-Freeze/RC)
 
 
 Promise
@@ -43,13 +43,24 @@ Requirements
 Role Variables
 --------------
 
-* app\_\_acme\_\_remote\_proxy - mandatory, hostname of where to find the certificates to collect
+* app\_\_acme\_\_home - optional, default='/var/lib/acme'
+* app\_\_acme\_\_config\_dir - optional, default='/etc/ssl/acme'
+* app\_\_acme\_\_scripts\_dir - optional, default='/etc/ssl/acme/scripts'
+* app\_\_acme\_\_bin\_dir - optional, default='/usr/local/bin'
+* app\_\_acme\_\_domain - optional, default=[ {domain='example.com'} ]
+* app\_\_acme\_\_letsencrypt\_certs - optional, default=[ {url='https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem', file='intermediate.crt'}, {url='https://letsencrypt.org/certs/isrgrootx1.pem', file='ca.crt'} ]
+* app\_\_acme\_\_cron\_minute - optional, default='55'
+* app\_\_acme\_\_cron\_hour - optional, default='4'
+* app\_\_acme\_\_cron\_day - optional, default='\*'
+* app\_\_acme\_\_cron\_month - optional, default='\*'
+* app\_\_acme\_\_cron\_year - optional, default='\*'
 * fqdn - optional, default={{ ansible\_fqdn | d(inventory\_hostname ) }}
 
 Dependencies
 ------------
 
-* inofix.acme-setup
+* inofix.acme-request
+ * (inofix.acme-setup)
 
 
 Example Playbook
@@ -58,6 +69,8 @@ Example Playbook
     - hosts: servers
       roles:
          - inofix.acme-proxy
+
+(See inofix.acme-setup)
 
 License
 -------

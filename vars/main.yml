@@ -7,7 +7,7 @@ acme__home: '{{ app__acme__home | d(default__acme__home) }}'
 
 acme__config_dir: '{{ app__acme__config_dir | d(default__acme__config_dir) }}'
 acme__scripts_dir: '{{ app__acme__scripts_dir | d(default__acme__scripts_dir) }}'
-acme__wrapper: '{{ acme__bin_dir }}/acme-wrapper.sh'
+acme__wrapper: '{{ app__acme__bin_dir }}/acme-wrapper.sh'
 
 acme__cs: '{{ app__acme__domain |
                     rejectattr("sign", "equalto", acme__fqdn) | list() }}'
